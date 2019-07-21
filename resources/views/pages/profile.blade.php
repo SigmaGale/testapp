@@ -53,7 +53,7 @@
         @if(count($data['posts'])>0)
             @foreach($data['posts'] as $post)
                <div class="alert alert-secondary" role="alert">
-            <div class="dropdown float-right">
+            <div class="dropdown float-right">test
              @if($data['user']->id == auth()->user()->id)
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     </button>
