@@ -69,7 +69,7 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        
+        //Edit preparation for Update
         $post =  Post::find($id);
 
         if(auth()->user()->id !== $post->posted_by){
@@ -95,7 +95,7 @@ class PostsController extends Controller
             'body' => 'required'
         ]);
 
-         
+        //Update post
         $post =  Post::find($id);
         $post -> body = $request -> input('body');
         $post -> posted_by = auth()->user()->id;
