@@ -3,6 +3,7 @@
 @section('content')
     
    
+    <!-- JavaScript script to check for text change -->
     <script>
         var total;
         function textChange(value){
@@ -11,18 +12,27 @@
             document.getElementById("counter").innerHTML =  maxLength -  x.length;
         }
     </script>
+    <!-- end of script -->
+
+    <!--  Create a post block -->
      <h1>Create Post</h1><p id="counter" class="float-right">140</p>
-     {!! Form::open(['action'=> 'PostsController@store','method' => 'POST'])!!}
+     {!! Form::open(['action'=> 'PostsController@store','method' => 'POST','enctype' => 'multipart/form-data'])!!}
              <div class="form-group">
                 {{Form::textarea('body','',['class' => 'form-control','rows'=>'2','id'=>'postTextArea','oninput' => "textChange()",'placeholder' => 'Say something...', 'maxLength' => '140'])}}
              </div>
+              <div class="form-group">
+                <p>Upload an image: {{Form::file('attachedImage')}}</p>
+             </div>
+             
              {{Form::submit('Submit',['class' => 'btn btn-primary" float-right'])}}
      {!! Form::close()!!}
+
+     <!-- end of block -->
     <br><br>
     <h3>HOME</h3><hr>
     
     
-    
+    <!-- Posts contents -->
         @if(count($posts)>0)
             @foreach($posts as $post)
             <div class="alert alert-secondary" style="height:100%" role="alert">
@@ -63,6 +73,9 @@
                         <td class="col-sm-9">
                          
                             <p><a href="/users/{{$post->posted_by}}">{{$post->user['name']}}</a> said "{{$post->body}}"</p>
+                            @if($post->attachedImage != null)
+                                <img class="img-fluid" style="width:120px;height:auto; display:block ;margin-top:-auto" src="/storage/posts_image/{{$post->attachedImage}}">
+                            @endif
                             <small>Quoted {{$post->created_at->diffForHumans()}}</small>
                         </td>   
                     </tr>
