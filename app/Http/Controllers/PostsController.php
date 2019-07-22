@@ -38,12 +38,34 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         $this -> validate($request,[
-            'body' => 'required'
+            'body' => 'required',
+            'attachedImage' => 'image|nullable|max:1999'
         ]);
+
+        /*
+        *
+        * Image/File Handling Block
+        * 
+        */
+
+        if($request->hasFile('attachedImage')){
+            $filenameWithExtension = $request-> file('attachedImage')->getClientOriginalName();
+
+            $filename = pathinfo($filenameWithExtension,PATHINFO_FILENAME);
+
+            $extension = $request->file('attachedImage')->getClientOriginalExtension();
+
+            $fileNameToStore = $filename.'_'.time().auth()->user()->id.'.'.$extension;
+
+            $path = $request-> file('attachedImage')->storeAs('public/posts_image',$fileNameToStore);
+        }
+        
         
         $post = new Post;
         $post -> body = $request -> input('body');
-        $post -> posted_by = auth()->user()->id;
+        $post -> posted_by = auth()->user()->id; 
+        if($request->hasfile('attachedImage'))
+        $post -> attachedImage = $fileNameToStore;
         $post -> save();
         
         return redirect('/posts')-> with('success','Post Created');
