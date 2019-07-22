@@ -24,6 +24,14 @@
                     </div>
                 </div>
             </div>
+
+            <!--
+            /
+            / Checks if the user that is viewed is the same as to what is logged in
+            / 
+            -->
+
+            <!-- block for profle picture -->
             @if($data['user']->id == auth()->user()->id)
                 
                     {!! Form::open(['action'=> ['UsersController@update',auth()->user()->id],'method' => 'POST','enctype'=>'multipart/form-data'])!!}
@@ -34,17 +42,24 @@
                         
                     {!! Form::close()!!}
                 
-
+                <!-- Block for creating a post-->
                 <h1>Create Post</h1><p id="counter" class="float-right">140</p>
-                {!! Form::open(['action'=> 'PostsController@store','method' => 'POST'])!!}
+                {!! Form::open(['action'=> 'PostsController@store','method' => 'POST','enctype' => 'multipart/form-data'])!!}
                         <div class="form-group">
                             {{Form::textarea('body','',['class' => 'form-control','rows'=>'2','id'=>'postTextArea','oninput' => "textChange()",'placeholder' => 'Say something...', 'maxLength' => '140'])}}
+                        </div>
+                        <div class="form-group">
+                            <p>Upload an image: {{Form::file('attachedImage')}}</p>
                         </div>
                         {{Form::submit('Submit',['class' => 'btn btn-primary" float-right'])}}
                 {!! Form::close()!!}
                 <br><br>
                 <h3>Your posts</h3>
             @else 
+
+            <!-- End of block -->
+
+
                 <br><br>
                 <h3>{{$data['user']->name}}'s posts</h3>
             @endif
@@ -53,7 +68,7 @@
         @if(count($data['posts'])>0)
             @foreach($data['posts'] as $post)
                <div class="alert alert-secondary" role="alert">
-            <div class="dropdown float-right">test
+            <div class="dropdown float-right">
              @if($data['user']->id == auth()->user()->id)
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     </button>
@@ -85,14 +100,19 @@
                         <td class="col-sm-9">
                          
                             <p><a href="/users/{{$post->posted_by}}">{{$post->user['name']}}</a> said "{{$post->body}}"</p>
+                            @if($post->attachedImage != null)
+                                <a href ="/storage/posts_image/{{$post->attachedImage}}" ><img class="img-fluid" style="width:120px;height:auto; display:block ;margin-top:-auto" src="/storage/posts_image/{{$post->attachedImage}}"></a>
+                            @endif
+                            
                             <small>Quoted {{$post->created_at->diffForHumans()}}</small>
                         </td>   
                     </tr>
                 </table>
-               {{$data['posts']->links()}}
+
             </div>
               
             @endforeach
+            {{$data['posts']->links('vendor.pagination/bootstrap-4')}}
         @else 
             <p> No posts available</p>
         @endif
