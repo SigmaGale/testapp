@@ -15,4 +15,8 @@ class PagesController extends Controller
         return view('pages.login')->with('title',"Log in");
     }
 
+    public function restricted(){
+        return "test";
+    }
+
 }
