@@ -74,7 +74,7 @@
                          
                             <p><a href="/users/{{$post->posted_by}}">{{$post->user['name']}}</a> said "{{$post->body}}"</p>
                             @if($post->attachedImage != null)
-                                <img class="img-fluid" style="width:120px;height:auto; display:block ;margin-top:-auto" src="/storage/posts_image/{{$post->attachedImage}}">
+                                <a href ="/storage/posts_image/{{$post->attachedImage}}" > <img class="img-fluid" style="width:120px;height:auto; display:block ;margin-top:-auto" src="/storage/posts_image/{{$post->attachedImage}}"></a>
                             @endif
                             <small>Quoted {{$post->created_at->diffForHumans()}}</small>
                         </td>   
